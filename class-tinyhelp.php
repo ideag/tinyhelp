@@ -11,11 +11,7 @@ class tinyHelp {
 		}
 		$this->slug = $args['slug'];
 		$this->modules = $args['modules'];
-		add_action( 'admin_bar_menu', array( $this, 'indicator'), 100, 1 );
 		add_action( 'current_screen', array( $this, 'start' ) );
-	}
-	public function indicator( $bar ) {
-		$bar->add_menu( array( 'title' => 'tinyHelp Active', 'id' => 'tinyhelp' ) );
 	}
 	public function start( $screen ) {
 		if ( 'plugin-install' !== $screen->base ) {
@@ -34,13 +30,10 @@ class tinyHelp {
 		if ( ! property_exists( $args, 'search' ) ) {
 			return $result;
 		}
-		if ( 'test' === $args->search ) {
-			$inject = $this->prepare( 'test' );
-			array_unshift( $result->plugins, $inject );
-		}
-		if ( 'test2' === $args->search ) {
-			$inject = $this->prepare( 'test2' );
-			array_unshift( $result->plugins, $inject );
+		$modules = $this->filter( $this->modules, $args->search );
+		foreach ( $modules as $module => $data ) {
+			$inject = $this->prepare( $module );
+			array_unshift( $result->plugins, $inject );			
 		}
 		return $result;
 	}
@@ -75,6 +68,21 @@ class tinyHelp {
 			$links[] = '<a ' . $attributes . '>' . esc_html( $link['title'] ). '</a>'; 
 		}		
 		return $links;
+	}
+	protected function filter( $modules, $search ) {
+		foreach ( $modules as $key => $item ) {
+			$match = false;
+			foreach ( $item['search_terms'] as $term ) {
+				$term = "/{$term}/ims";
+				if ( 1 === preg_match( $term, $search ) ) {
+					$match = true;
+				}
+			}
+			if ( ! $match ) {
+				unset( $modules[ $key ] );
+			}
+		}
+		return $modules;
 	}
 	protected function prepare( $module ) {
 		if ( ! isset( $this->modules[ $module ] ) ) {
