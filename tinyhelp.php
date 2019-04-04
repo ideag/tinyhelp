@@ -20,6 +20,7 @@ $args = array(
 			'version' => '0.1.0',
 			'author_name' => __( 'Arūnas', 'tinyhelp' ),
 			'author_uri' => 'https://arunas.co',
+			'search_terms' => array( 'test.*' ),
 			'icons' => array(
 				'1x'  => 'https://placeholder.pics/png/128',
 				'2z'  => 'https://placeholder.pics/png/256',
@@ -51,6 +52,9 @@ $args = array(
 			'name' => __( 'Test Module 2', 'tinyhelp' ),
 			'short_description' => __( 'Short description for this injected module goes here', 'tinyhelp' ),
 			'version' => '0.1.0',
+			'author_name' => __( 'Arūnas', 'tinyhelp' ),
+			'author_uri' => 'https://arunas.co',
+			'search_terms' => array( 'testing', 'beta' ),
 			'icons' => array(
 				'1x'  => 'https://placeholder.pics/png/128',
 				'2z'  => 'https://placeholder.pics/png/256',
@@ -72,5 +76,6 @@ $args = array(
 		),
 	),
 );
+
 require_once( __DIR__ . '/class-tinyhelp.php' );
 $th = new tinyHelp( $args );
